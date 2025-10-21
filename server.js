@@ -2,11 +2,13 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const os = require('os');
+const { ListenerSystem } = require('./src/ListenerSystem');
 
 const app = express();
 const PORT = 2456;
 
 app.use(cors());
+app.use(express.json());
 
 // === Helper: Convert Bytes to Human-Readable ===
 function formatBytes(bytes) {
@@ -260,9 +262,193 @@ app.get('/getAllListings', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+// Initialize Listener System
+let listenerSystem = null;
+
+async function initializeListenerSystem() {
+    try {
+        listenerSystem = new ListenerSystem({
+            redis: {
+                host: process.env.REDIS_HOST || 'localhost',
+                port: process.env.REDIS_PORT || 6379,
+                password: process.env.REDIS_PASSWORD || null,
+                db: process.env.REDIS_DB || 0
+            },
+            sqlite: {
+                path: process.env.SQLITE_PATH || './data/listener.db'
+            },
+            maxConcurrentPolls: parseInt(process.env.MAX_CONCURRENT_POLLS) || 5,
+            pollIntervalMs: parseInt(process.env.POLL_INTERVAL_MS) || 10000,
+            adminPort: parseInt(process.env.ADMIN_PORT) || 3001,
+            logLevel: process.env.LOG_LEVEL || 'info',
+            enableMetrics: process.env.ENABLE_METRICS !== 'false'
+        });
+
+        await listenerSystem.initialize();
+        await listenerSystem.start();
+        
+        console.log('Listener System started successfully');
+        console.log(`Admin API available at: http://localhost:${process.env.ADMIN_PORT || 3001}/api/admin`);
+        
+    } catch (error) {
+        console.error('Failed to initialize Listener System:', error);
+        console.log('Continuing with basic scraper functionality only...');
+    }
+}
+
+// Add listener system endpoints
+app.get('/listener/status', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const status = await listenerSystem.getStatus();
+        res.json(status);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/listener/health', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const health = await listenerSystem.getHealth();
+        res.json(health);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/listener/metrics', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const metrics = await listenerSystem.getMetrics();
+        res.set('Content-Type', 'text/plain');
+        res.send(metrics);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add target management endpoints
+app.post('/listener/targets', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const target = await listenerSystem.addPollingTarget(req.body);
+        res.status(201).json(target);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/listener/targets', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const targets = await listenerSystem.stateStore.getAllPollingTargets();
+        res.json(targets);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.delete('/listener/targets/:id', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const success = await listenerSystem.removePollingTarget(req.params.id);
+        if (success) {
+            res.status(204).send();
+        } else {
+            res.status(404).json({ error: 'Target not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Add subscriber management endpoints
+app.post('/listener/subscribers', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const subscriber = await listenerSystem.addSubscriber(req.body);
+        res.status(201).json(subscriber);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+app.get('/listener/subscribers', async (req, res) => {
+    if (!listenerSystem) {
+        return res.status(503).json({ error: 'Listener system not available' });
+    }
+    
+    try {
+        const subscribers = await listenerSystem.notificationService.getSubscribers();
+        res.json(subscribers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+    console.log('\nReceived SIGINT, shutting down gracefully...');
+    
+    if (listenerSystem) {
+        try {
+            await listenerSystem.stop();
+            console.log('Listener system stopped');
+        } catch (error) {
+            console.error('Error stopping listener system:', error);
+        }
+    }
+    
+    process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+    console.log('\nReceived SIGTERM, shutting down gracefully...');
+    
+    if (listenerSystem) {
+        try {
+            await listenerSystem.stop();
+            console.log('Listener system stopped');
+        } catch (error) {
+            console.error('Error stopping listener system:', error);
+        }
+    }
+    
+    process.exit(0);
+});
+
+// Start server
+app.listen(PORT, async () => {
     console.log(`Scraper API running at http://localhost:${PORT}`);
     console.log(`Endpoints:`);
     console.log(`  Single page: http://localhost:${PORT}/getListings?url=YOUR_WILLHABEN_URL`);
     console.log(`  All pages:   http://localhost:${PORT}/getAllListings?url=YOUR_WILLHABEN_URL`);
+    console.log(`  Listener status: http://localhost:${PORT}/listener/status`);
+    console.log(`  Listener health: http://localhost:${PORT}/listener/health`);
+    console.log(`  Listener metrics: http://localhost:${PORT}/listener/metrics`);
+    
+    // Initialize listener system after server starts
+    await initializeListenerSystem();
 });
