@@ -1,1 +1,0 @@
-{"config":{"adminPort":3001,"maxConcurrentPolls":5,"pollIntervalMs":10000},"level":"info","message":"ListenerSystem started","service":"willhaben-listener","timestamp":"2025-10-21T08:08:57.926Z"}
