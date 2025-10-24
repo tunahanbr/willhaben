@@ -1,3 +1,17 @@
+FROM node:20-slim AS builder
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy app source
+COPY . .
+
 FROM node:20-slim
 
 # Install dependencies for Puppeteer
@@ -11,26 +25,34 @@ RUN apt-get update \
        fonts-freefont-ttf \
        libxss1 \
        --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads \
+    && chown -R pptruser:pptruser /home/pptruser
 
 # Set environment variables for Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
+    NODE_ENV=production
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Copy package files
-COPY package*.json ./
+# Copy from builder stage
+COPY --from=builder /usr/src/app .
 
-# Install dependencies
-RUN npm install
+# Set permissions
+RUN chown -R pptruser:pptruser /usr/src/app
 
-# Copy app source
-COPY . .
+# Switch to non-root user
+USER pptruser
 
 # Expose port
 EXPOSE 2456
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD node healthcheck.js
 
 # Start the application
 CMD ["npm", "start"]

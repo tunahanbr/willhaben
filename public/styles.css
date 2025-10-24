@@ -469,3 +469,78 @@ body {
         transform: translateY(0);
     }
 }
+
+/* Auth page specific styles */
+.auth-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.logo-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    background-color: var(--primary);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-card {
+    background-color: transparent;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+}
+
+.auth-input {
+    padding-left: 40px !important;
+}
+
+.theme-toggle-auth {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

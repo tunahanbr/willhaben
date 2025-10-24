@@ -1,0 +1,96 @@
+{"level":"info","message":"╔════════════════════════════════════════════════════════════════╗","timestamp":"2025-10-24T20:28:02.241Z"}
+{"level":"info","message":"║  Enhanced Willhaben Scraper API - Running on Port 2456     ║","timestamp":"2025-10-24T20:28:02.247Z"}
+{"level":"info","message":"║  Environment: production                                    ║","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"╚════════════════════════════════════════════════════════════════╝","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"📊 Basic Endpoints:","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"  GET /api/getListings?url=YOUR_URL","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"  GET /api/getAllListings?url=YOUR_URL","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"🔄 Monitoring Endpoints:","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"  GET /api/startMonitoring?url=YOUR_URL&webhook=YOUR_WEBHOOK","timestamp":"2025-10-24T20:28:02.248Z"}
+{"level":"info","message":"  GET /api/stopMonitoring?url=YOUR_URL","timestamp":"2025-10-24T20:28:02.249Z"}
+{"level":"info","message":"  GET /api/getChanges?url=YOUR_URL&clear=true","timestamp":"2025-10-24T20:28:02.249Z"}
+{"level":"info","message":"  GET /api/getMonitoringStatus","timestamp":"2025-10-24T20:28:02.249Z"}
+{"level":"info","message":"🌐 Server ready in production mode","timestamp":"2025-10-24T20:28:02.249Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:31 +0000] \"GET / HTTP/1.1\" 200 5214 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:31.672Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:31 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:31.704Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:31 +0000] \"GET /styles.css HTTP/1.1\" 200 7967 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:31.705Z"}
+{"ip":"::ffff:127.0.0.1","key":"your...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:31:31.730Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:31 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:31.732Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:34 +0000] \"GET /auth.html HTTP/1.1\" 200 11294 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:34.808Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:31:34 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:31:34.839Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2025-10-24T20:32:22.338Z"}
+{"level":"info","message":"╔════════════════════════════════════════════════════════════════╗","timestamp":"2025-10-24T20:32:25.748Z"}
+{"level":"info","message":"║  Enhanced Willhaben Scraper API - Running on Port 2456     ║","timestamp":"2025-10-24T20:32:25.750Z"}
+{"level":"info","message":"║  Environment: production                                    ║","timestamp":"2025-10-24T20:32:25.750Z"}
+{"level":"info","message":"╚════════════════════════════════════════════════════════════════╝","timestamp":"2025-10-24T20:32:25.750Z"}
+{"level":"info","message":"📊 Basic Endpoints:","timestamp":"2025-10-24T20:32:25.750Z"}
+{"level":"info","message":"  GET /api/getListings?url=YOUR_URL","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"  GET /api/getAllListings?url=YOUR_URL","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"🔄 Monitoring Endpoints:","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"  GET /api/startMonitoring?url=YOUR_URL&webhook=YOUR_WEBHOOK","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"  GET /api/stopMonitoring?url=YOUR_URL","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"  GET /api/getChanges?url=YOUR_URL&clear=true","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"  GET /api/getMonitoringStatus","timestamp":"2025-10-24T20:32:25.751Z"}
+{"level":"info","message":"🌐 Server ready in production mode","timestamp":"2025-10-24T20:32:25.752Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:32:28 +0000] \"GET /auth.html HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:32:28.945Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:32:28 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:32:28.969Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:50 +0000] \"GET /auth.html HTTP/1.1\" 200 3823 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:50.472Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:50 +0000] \"GET /styles.css HTTP/1.1\" 200 9229 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:50.509Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:50 +0000] \"GET /js/auth.js HTTP/1.1\" 200 5016 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:50.509Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:53 +0000] \"GET /auth.html HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:53.902Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:53 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:53.933Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:38:53 +0000] \"GET /js/auth.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:38:53.934Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:39:56 +0000] \"GET /auth.html HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:39:56.279Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:39:56 +0000] \"GET /js/auth.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:39:56.304Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:39:56 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:39:56.306Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:05 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 200 400 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:05.484Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:06 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:06.608Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:06 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:06.654Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:06 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:06.654Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:06 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:06.662Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:06 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:06.682Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:14 +0000] \"GET /auth.html HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:14.057Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:14 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:14.087Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:14 +0000] \"GET /js/auth.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:14.088Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:15.747Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:15 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:15.749Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:17.649Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:17 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:17.650Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:18.532Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:18 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:18.533Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:19.906Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:19 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:19.908Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:20.091Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:20 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:20.092Z"}
+{"ip":"::ffff:127.0.0.1","key":"wecw...","level":"warn","message":"Invalid API key used","path":"/getMonitoringStatus","timestamp":"2025-10-24T20:40:20.294Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:20 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 403 27 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:20.296Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:32 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 200 400 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:32.120Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:33 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:33.233Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:33 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:33.273Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:33 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:33.274Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:40:33 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:40:33.289Z"}
+{"level":"info","message":"╔════════════════════════════════════════════════════════════════╗","timestamp":"2025-10-24T20:58:43.457Z"}
+{"level":"info","message":"║  Enhanced Willhaben Scraper API - Running on Port 2456     ║","timestamp":"2025-10-24T20:58:43.458Z"}
+{"level":"info","message":"║  Environment: production                                    ║","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"╚════════════════════════════════════════════════════════════════╝","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"📊 Basic Endpoints:","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"  GET /api/getListings?url=YOUR_URL","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"  GET /api/getAllListings?url=YOUR_URL","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"🔄 Monitoring Endpoints:","timestamp":"2025-10-24T20:58:43.459Z"}
+{"level":"info","message":"  GET /api/startMonitoring?url=YOUR_URL&webhook=YOUR_WEBHOOK","timestamp":"2025-10-24T20:58:43.460Z"}
+{"level":"info","message":"  GET /api/stopMonitoring?url=YOUR_URL","timestamp":"2025-10-24T20:58:43.460Z"}
+{"level":"info","message":"  GET /api/getChanges?url=YOUR_URL&clear=true","timestamp":"2025-10-24T20:58:43.460Z"}
+{"level":"info","message":"  GET /api/getMonitoringStatus","timestamp":"2025-10-24T20:58:43.460Z"}
+{"level":"info","message":"🌐 Server ready in production mode","timestamp":"2025-10-24T20:58:43.460Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:12 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:12.955Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:12 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:12.981Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:12 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:12.982Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:13 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:13.004Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:18 +0000] \"GET /auth.html HTTP/1.1\" 200 3823 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:18.226Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:18 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:18.255Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:18 +0000] \"GET /js/auth.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:18.256Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:24 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:24.884Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:25 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:25.997Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:26 +0000] \"GET /styles.css HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:26.031Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:26 +0000] \"GET /app.js HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:26.032Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [24/Oct/2025:20:59:26 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-24T20:59:26.042Z"}
