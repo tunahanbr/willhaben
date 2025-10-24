@@ -7,6 +7,25 @@ class PersistenceManager {
         this.initialized = this.init();
     }
 
+    _cleanConfigForStorage(config) {
+        return {
+            title: config.title,
+            originalUrl: config.originalUrl,
+            normalizedUrl: config.normalizedUrl,
+            webhookUrl: config.webhookUrl,
+            currentInterval: config.currentInterval,
+            lastSnapshot: config.lastSnapshot,
+            changes: config.changes,
+            startedAt: config.startedAt,
+            lastCheck: config.lastCheck,
+            nextCheckAt: config.nextCheckAt,
+            checkCount: config.checkCount,
+            consecutiveErrors: config.consecutiveErrors,
+            lastError: config.lastError,
+            lastScrapingStats: config.lastScrapingStats
+        };
+    }
+
     async init() {
         return new Promise((resolve, reject) => {
             this.db.run(`
@@ -25,9 +44,10 @@ class PersistenceManager {
 
     async saveMonitor(url, config) {
         await this.initialized;
+        const cleanConfig = this._cleanConfigForStorage(config);
         return new Promise((resolve, reject) => {
             const stmt = this.db.prepare('INSERT INTO monitors (url, config) VALUES (?, ?)');
-            stmt.run(url, JSON.stringify(config), (err) => {
+            stmt.run(url, JSON.stringify(cleanConfig), (err) => {
                 if (err) reject(err);
                 else resolve();
             });
@@ -54,9 +74,10 @@ class PersistenceManager {
 
     async updateMonitor(url, config) {
         await this.initialized;
+        const cleanConfig = this._cleanConfigForStorage(config);
         return new Promise((resolve, reject) => {
             const stmt = this.db.prepare('UPDATE monitors SET config = ? WHERE url = ?');
-            stmt.run(JSON.stringify(config), url, (err) => {
+            stmt.run(JSON.stringify(cleanConfig), url, (err) => {
                 if (err) reject(err);
                 else resolve();
             });

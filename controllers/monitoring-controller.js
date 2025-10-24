@@ -23,7 +23,7 @@ async function startMonitoring(req, res) {
         // Perform initial check
         await monitoringService.performSmartMonitoringCheck(job.normalizedUrl);
         
-        const nextCheckTime = new Date(Date.now() + job.currentInterval).toISOString();
+        const nextCheckTime = job.nextCheckAt;
 
         res.status(200).json({
             message: 'Monitoring started successfully',
@@ -145,7 +145,7 @@ function getMonitoringStatus(req, res) {
             lastError: job.lastError,
             lastScrapingStats: job.lastScrapingStats,
             circuitBreaker: circuitBreaker.getState ? circuitBreaker.getState() : null,
-            nextCheck: new Date(Date.now() + job.currentInterval).toISOString()
+            nextCheck: job.nextCheckAt
         };
     });
 

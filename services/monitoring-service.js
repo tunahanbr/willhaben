@@ -103,6 +103,10 @@ async function performSmartMonitoringCheck(normalizedUrl) {
     const job = monitoringJobs.get(normalizedUrl);
     if (!job) return;
 
+    // Create circuit breaker if it doesn't exist
+    if (!circuitBreakers.has(normalizedUrl)) {
+        circuitBreakers.set(normalizedUrl, new CircuitBreaker(5, 60000));
+    }
     const breaker = circuitBreakers.get(normalizedUrl);
     
     try {
@@ -205,9 +209,17 @@ function rescheduleJob(normalizedUrl, newInterval) {
         clearInterval(job.intervalId);
     }
     
+    // Calculate and store the next check time
+    job.nextCheckAt = new Date(Date.now() + newInterval).toISOString();
+    
     job.intervalId = setInterval(() => {
         performSmartMonitoringCheck(normalizedUrl);
     }, newInterval);
+    
+    // Update the persisted job with the new next check time
+    persistence.updateMonitor(normalizedUrl, job).catch(err => {
+        console.error(`Error updating monitor nextCheckAt: ${err.message}`);
+    });
 }
 
 // === Public Methods ===
@@ -236,6 +248,7 @@ function startMonitoring(fullUrl, webhookUrl = null, intervalMinutes = null) {
         lastSnapshot: [],
         changes: [],
         startedAt: new Date().toISOString(),
+        nextCheckAt: new Date(Date.now() + initialInterval).toISOString(),
         lastCheck: null,
         checkCount: 0,
         consecutiveErrors: 0,
@@ -260,6 +273,12 @@ async function loadPersistedMonitors() {
                     intervalId: null
                 };
                 monitoringJobs.set(url, job);
+                
+                // Create circuit breaker if it doesn't exist
+                if (!circuitBreakers.has(url)) {
+                    circuitBreakers.set(url, new CircuitBreaker(5, 60000));
+                }
+                
                 rescheduleJob(url, job.currentInterval || CONFIG.DEFAULT_INTERVAL);
             }
         }
