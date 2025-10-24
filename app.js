@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const monitoringRoutes = require('./routes/monitoring');
 const scrapingRoutes = require('./routes/scraping');
+const validateApiKey = require('./middleware/auth');
 
 const app = express();
 const PORT = 2456;
@@ -13,8 +14,8 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api', monitoringRoutes);
-app.use('/api', scrapingRoutes);
+app.use('/api', validateApiKey, monitoringRoutes);
+app.use('/api', validateApiKey, scrapingRoutes);
 
 // Cleanup on server shutdown
 process.on('SIGINT', async () => {

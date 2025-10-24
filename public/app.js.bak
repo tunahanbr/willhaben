@@ -1,15 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Content Loaded');
-
-    // Check if we have an API key
-    const apiKey = localStorage.getItem('apiKey');
-    if (!apiKey) {
-        window.location.href = '/auth.html';
-        return;
-    }
-
+    
     // Elements
-    const logoutBtn = document.getElementById('logoutBtn');
+    const apiKeyInput = document.getElementById('apiKey');
+    const saveApiKeyBtn = document.getElementById('saveApiKey');
     const monitorTitleInput = document.getElementById('monitorTitle');
     const monitorUrlInput = document.getElementById('monitorUrl');
     const webhookUrlInput = document.getElementById('webhookUrl');
@@ -17,13 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshStatusBtn = document.getElementById('refreshStatus');
     const activeMonitorsContainer = document.getElementById('activeMonitors');
 
-    // Handle logout
-    logoutBtn.addEventListener('click', () => {
-        if (confirm('Are you sure you want to logout?')) {
-            localStorage.removeItem('apiKey');
-            window.location.href = '/auth.html';
+    // Load saved API key
+    const savedApiKey = localStorage.getItem('apiKey');
+    if (savedApiKey) {
+        apiKeyInput.value = savedApiKey;
+    }
+
+    // Save API key
+    saveApiKeyBtn.addEventListener('click', () => {
+        const apiKey = apiKeyInput.value.trim();
+        if (apiKey) {
+            localStorage.setItem('apiKey', apiKey);
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <div class="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    <span>API key saved successfully!</span>
+                </div>
+            `;
+            document.querySelector('.container').insertAdjacentElement('afterbegin', successMessage);
+            setTimeout(() => successMessage.remove(), 3000);
         }
-    });
 
     // Verify elements are found
     console.log('Elements found:', {

@@ -14,7 +14,11 @@
         <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div class="container flex h-14 items-center justify-between">
                 <h1 class="text-xl font-semibold">Willhaben Monitor</h1>
-                <button id="themeToggle" class="theme-toggle">
+                <div class="flex items-center gap-4">
+                    <button id="logoutBtn" class="btn-secondary text-sm">
+                        Logout
+                    </button>
+                    <button id="themeToggle" class="theme-toggle">
                     <div id="lightIcon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="4"/>
@@ -34,11 +38,13 @@
                         </svg>
                     </div>
                 </button>
+                </div>
             </div>
         </header>
 
         <main class="container py-8">
             <div class="grid gap-8">
+
                 <section class="grid gap-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-semibold">Add New Monitor</h2>

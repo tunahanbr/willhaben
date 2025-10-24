@@ -445,6 +445,20 @@ body {
     margin-right: 0.5rem;
 }
 
+.border-destructive {
+    border-color: var(--destructive);
+}
+
+.text-destructive {
+    color: var(--destructive);
+}
+
+.input-error {
+    margin-top: 0.25rem;
+    color: var(--destructive);
+    font-size: 0.875rem;
+}
+
 @keyframes slideIn {
     from {
         opacity: 0;
