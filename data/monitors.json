@@ -1,0 +1,20 @@
+[
+  [
+    "https://www.willhaben.at/iad/gebrauchtwagen/auto/gebrauchtwagenboerse?CAR_MODEL%2FMAKE=1003&CAR_MODEL%2FMODEL=1789&CAR_TYPE=6&ENGINE%2FFUEL=100003&MILEAGE_TO=200000&MOTOR_CONDITION=20&PRICE_TO=15000&TRANSMISSION=180004&YEAR_MODEL_FROM=2013&isNavigation=true&page=1&rows=30&searchKey=2&sfId=f7015974-b0fe-4e92-b72c-8ce8b7ab7ce6&title=Audi+A5",
+    {
+      "title": "Audi A5",
+      "originalUrl": "https://www.willhaben.at/iad/gebrauchtwagen/auto/gebrauchtwagenboerse?ENGINE/FUEL=100003&TRANSMISSION=180004&MOTOR_CONDITION=20&MILEAGE_TO=200000&CAR_TYPE=6&YEAR_MODEL_FROM=2013&page=1&sfId=f7015974-b0fe-4e92-b72c-8ce8b7ab7ce6&CAR_MODEL/MODEL=1789&rows=30&CAR_MODEL/MAKE=1003&PRICE_TO=15000&searchKey=2&isNavigation=true&title=Audi%20A5",
+      "normalizedUrl": "https://www.willhaben.at/iad/gebrauchtwagen/auto/gebrauchtwagenboerse?CAR_MODEL%2FMAKE=1003&CAR_MODEL%2FMODEL=1789&CAR_TYPE=6&ENGINE%2FFUEL=100003&MILEAGE_TO=200000&MOTOR_CONDITION=20&PRICE_TO=15000&TRANSMISSION=180004&YEAR_MODEL_FROM=2013&isNavigation=true&page=1&rows=30&searchKey=2&sfId=f7015974-b0fe-4e92-b72c-8ce8b7ab7ce6&title=Audi+A5",
+      "webhookUrl": "https://n8n.tunahan.at/webhook/willhaben",
+      "currentInterval": 120000,
+      "lastSnapshot": [],
+      "changes": [],
+      "startedAt": "2025-10-24T16:05:34.471Z",
+      "lastCheck": null,
+      "checkCount": 0,
+      "consecutiveErrors": 0,
+      "lastError": null,
+      "lastScrapingStats": null
+    }
+  ]
+]

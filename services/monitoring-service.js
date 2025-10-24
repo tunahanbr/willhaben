@@ -4,6 +4,7 @@ const { sendToWebhook } = require('./webhook-service');
 const { normalizeUrl, setsEqual, isPeakHours } = require('../utils/helpers');
 const { buildUrlWithPage } = require('../utils/helpers');
 const CONFIG = require('../config/constants');
+const persistence = require('../utils/persistence');
 
 const monitoringJobs = new Map();
 const circuitBreakers = new Map();
@@ -167,6 +168,8 @@ async function performSmartMonitoringCheck(normalizedUrl) {
             }
 
             job.lastSnapshot = newListings;
+            // Update the persisted monitor
+            await persistence.updateMonitor(normalizedUrl, job);
             job.lastCheck = new Date().toISOString();
             job.checkCount = (job.checkCount || 0) + 1;
             job.consecutiveErrors = 0;
@@ -242,7 +245,27 @@ function startMonitoring(fullUrl, webhookUrl = null, intervalMinutes = null) {
     };
 
     monitoringJobs.set(normalizedUrl, job);
+    // Save to SQLite
+    persistence.saveMonitor(normalizedUrl, job);
     return job;
+}
+
+async function loadPersistedMonitors() {
+    try {
+        const monitors = await persistence.getMonitors();
+        for (const [url, config] of monitors) {
+            if (!monitoringJobs.has(url)) {
+                const job = {
+                    ...config,
+                    intervalId: null
+                };
+                monitoringJobs.set(url, job);
+                rescheduleJob(url, job.currentInterval || CONFIG.DEFAULT_INTERVAL);
+            }
+        }
+    } catch (error) {
+        console.error('Error loading persisted monitors:', error);
+    }
 }
 
 function stopMonitoring(normalizedUrl) {
@@ -254,6 +277,7 @@ function stopMonitoring(normalizedUrl) {
     clearInterval(job.intervalId);
     monitoringJobs.delete(normalizedUrl);
     circuitBreakers.delete(normalizedUrl);
+    persistence.deleteMonitor(normalizedUrl);
     return true;
 }
 
@@ -286,6 +310,9 @@ function cleanupAllJobs() {
     monitoringJobs.clear();
     circuitBreakers.clear();
 }
+
+// Load persisted monitors when the service starts
+loadPersistedMonitors().catch(console.error);
 
 module.exports = {
     startMonitoring,
