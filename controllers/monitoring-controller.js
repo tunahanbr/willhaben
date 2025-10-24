@@ -8,6 +8,7 @@ async function startMonitoring(req, res) {
     const baseUrl = req.query.url;
     const intervalMinutes = parseInt(req.query.interval) || null;
     const webhookUrl = req.query.webhook || null;
+    const title = req.query.title || null;
     
     if (!baseUrl) {
         return res.status(400).json({ error: 'A "url" query parameter is required.' });
@@ -17,6 +18,7 @@ async function startMonitoring(req, res) {
     
     try {
         const job = monitoringService.startMonitoring(fullUrl, webhookUrl, intervalMinutes);
+        job.title = title || `Monitor ${job.checkCount}`;
         
         // Perform initial check
         await monitoringService.performSmartMonitoringCheck(job.normalizedUrl);
@@ -25,6 +27,7 @@ async function startMonitoring(req, res) {
 
         res.status(200).json({
             message: 'Monitoring started successfully',
+            title: job.title,
             normalizedUrl: job.normalizedUrl,
             webhookUrl: webhookUrl || 'Not configured',
             checkInterval: `${(job.currentInterval / 60000).toFixed(1)} minutes (adaptive)`,
@@ -124,10 +127,11 @@ function getChanges(req, res) {
 function getMonitoringStatus(req, res) {
     const activeJobs = monitoringService.getAllJobs();
 
-    const formattedJobs = activeJobs.map(job => {
+            formattedJobs = activeJobs.map(job => {
         const circuitBreaker = new CircuitBreaker(); // You might want to store circuit breakers separately
         
         return {
+            title: job.title,
             normalizedUrl: job.normalizedUrl,
             originalUrl: job.originalUrl,
             webhookUrl: job.webhookUrl || 'Not configured',

@@ -225,6 +225,7 @@ function startMonitoring(fullUrl, webhookUrl = null, intervalMinutes = null) {
         : CONFIG.DEFAULT_INTERVAL;
 
     const job = {
+        title: null,  // Will be set by controller
         originalUrl: fullUrl,
         normalizedUrl: normalizedUrl,
         webhookUrl: webhookUrl,

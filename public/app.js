@@ -1,0 +1,386 @@
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Content Loaded');
+    
+    // Elements
+    const monitorTitleInput = document.getElementById('monitorTitle');
+    const monitorUrlInput = document.getElementById('monitorUrl');
+    const webhookUrlInput = document.getElementById('webhookUrl');
+    const addMonitorBtn = document.getElementById('addMonitor');
+    const refreshStatusBtn = document.getElementById('refreshStatus');
+    const activeMonitorsContainer = document.getElementById('activeMonitors');
+
+    // Verify elements are found
+    console.log('Elements found:', {
+        monitorTitleInput: !!monitorTitleInput,
+        monitorUrlInput: !!monitorUrlInput,
+        webhookUrlInput: !!webhookUrlInput,
+        addMonitorBtn: !!addMonitorBtn,
+        refreshStatusBtn: !!refreshStatusBtn,
+        activeMonitorsContainer: !!activeMonitorsContainer
+    });
+
+    // API Base URL
+    const API_BASE_URL = '/api';  // All our endpoints are under /api
+
+    // Helper function for API calls
+    async function fetchAPI(endpoint) {
+        try {
+            console.log(`Making API call to: ${API_BASE_URL}${endpoint}`);
+            const response = await fetch(`${API_BASE_URL}${endpoint}`);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error Response:', errorText);
+                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+            }
+            
+            const data = await response.json();
+            console.log(`API Response:`, data);
+            return data;
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
+    }
+
+    // Update monitors list
+    async function updateMonitorsList() {
+        try {
+            activeMonitorsContainer.innerHTML = `
+                <div class="flex items-center justify-center h-24 rounded-lg border border-dashed">
+                    <div class="flex items-center gap-2">
+                        <svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                        </svg>
+                        <p class="text-sm text-muted-foreground">Loading monitors...</p>
+                    </div>
+                </div>
+            `;
+
+            const status = await fetchAPI('/getMonitoringStatus');
+            
+            if (!status.jobs || status.jobs.length === 0) {
+                activeMonitorsContainer.innerHTML = `
+                    <div class="flex items-center justify-center h-24 rounded-lg border border-dashed">
+                        <p class="text-sm text-muted-foreground">No active monitors</p>
+                    </div>
+                `;
+                return;
+            }
+
+            console.log('Jobs data:', status.jobs);
+            activeMonitorsContainer.innerHTML = status.jobs.map(job => {
+                const nextCheckDate = job.nextCheck ? new Date(job.nextCheck) : null;
+                const interval = job.currentInterval ? (job.currentInterval / 60000).toFixed(1) : null;
+                
+                return `
+                <div class="monitor-item">
+                    <div class="monitor-accent"></div>
+                    <div class="monitor-content">
+                        <div class="monitor-header">
+                            <div class="monitor-status-badge ${nextCheckDate ? 'status-active pulse' : 'status-inactive'}">
+                                <span class="status-dot"></span>
+                                ${nextCheckDate ? 'Active' : 'Inactive'}
+                            </div>
+                            <button 
+                                class="monitor-stop" 
+                                onclick="stopMonitoringUrl('${encodeURIComponent(job.normalizedUrl)}')"
+                                title="Stop Monitoring"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6 6 18"/>
+                                    <path d="m6 6 12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="monitor-main">
+                            <h3 class="monitor-title">
+                                ${job.title || 'Untitled Monitor'}
+                                <span class="listing-count" title="Number of listings found">
+                                    ${job.currentListingsCount || 0}
+                                </span>
+                            </h3>
+                            
+                            <div class="monitor-url-section">
+                                <div class="url-label">URL</div>
+                                <div class="monitor-url">${job.normalizedUrl || 'Unknown URL'}</div>
+                            </div>
+                        </div>
+
+                        <div class="monitor-meta">
+                            <div class="meta-item">
+                                <div class="meta-value">${interval ? `${interval}m` : '—'}</div>
+                                <div class="meta-label">Interval</div>
+                            </div>
+
+                            <div class="meta-divider"></div>
+
+                            <div class="meta-item">
+                                <div class="meta-value">${nextCheckDate ? nextCheckDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—'}</div>
+                                <div class="meta-label">Next Check</div>
+                            </div>
+                        </div>
+
+                        ${job.webhookUrl ? `
+                        <div class="monitor-webhook">
+                            <div class="webhook-label">Webhook</div>
+                            <div class="webhook-url">${job.webhookUrl}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        } catch (error) {
+            activeMonitorsContainer.innerHTML = `
+                <div class="flex items-center justify-center h-24 rounded-lg border border-dashed">
+                    <div class="flex items-center gap-2 text-destructive">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 8v4M12 16h.01"/>
+                            <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                        <p class="text-sm">Failed to fetch monitors status</p>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+        // Add new monitor
+    addMonitorBtn.addEventListener('click', async () => {
+        const title = monitorTitleInput.value.trim();
+        const url = monitorUrlInput.value.trim();
+        const webhook = webhookUrlInput.value.trim();
+        
+        // Remove any existing error messages
+        document.querySelectorAll('.input-error').forEach(el => el.remove());
+        
+        let hasError = false;
+        
+        if (!title) {
+            const error = document.createElement('div');
+            error.className = 'text-sm text-destructive input-error';
+            error.textContent = 'Please enter a monitor title';
+            monitorTitleInput.insertAdjacentElement('afterend', error);
+            monitorTitleInput.classList.add('border-destructive');
+            hasError = true;
+        }
+        
+        if (!url) {
+            const error = document.createElement('div');
+            error.className = 'text-sm text-destructive input-error';
+            error.textContent = 'Please enter a Willhaben URL';
+            monitorUrlInput.insertAdjacentElement('afterend', error);
+            monitorUrlInput.classList.add('border-destructive');
+            hasError = true;
+        } else if (!url.startsWith('https://www.willhaben.at/')) {
+            const error = document.createElement('div');
+            error.className = 'text-sm text-destructive input-error';
+            error.textContent = 'Please enter a valid Willhaben URL';
+            monitorUrlInput.insertAdjacentElement('afterend', error);
+            monitorUrlInput.classList.add('border-destructive');
+            hasError = true;
+        }
+        
+        if (hasError) return;
+
+        try {
+            // Update button state
+            addMonitorBtn.disabled = true;
+            const originalText = addMonitorBtn.innerHTML;
+            addMonitorBtn.innerHTML = `
+                <svg class="animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                </svg>
+                Adding Monitor...
+            `;
+
+            console.log('Making API call to start monitoring...');
+            let endpoint = `/startMonitoring?url=${encodeURIComponent(url)}`;
+            if (webhook) {
+                endpoint += `&webhook=${encodeURIComponent(webhook)}`;
+            }
+            endpoint += `&title=${encodeURIComponent(title)}`;
+            console.log('API endpoint:', endpoint);
+            
+            const result = await fetchAPI(endpoint);
+            console.log('API call result:', result);
+            
+            // Clear inputs immediately after successful addition
+            monitorTitleInput.value = '';
+            monitorUrlInput.value = '';
+            webhookUrlInput.value = '';
+
+            // Remove any border-destructive classes
+            [monitorTitleInput, monitorUrlInput, webhookUrlInput].forEach(input => {
+                input.classList.remove('border-destructive');
+            });
+
+            // Update the monitors list
+            console.log('Updating monitors list...');
+            await updateMonitorsList();
+
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <div class="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    <span>Monitor added successfully!</span>
+                </div>
+            `;
+            document.querySelector('.container').insertAdjacentElement('afterbegin', successMessage);
+
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        } catch (error) {
+            console.error('Failed to add monitor:', error);
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = `
+                <div class="flex items-center justify-center gap-2 bg-destructive text-destructive-foreground p-4 rounded-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 8v4M12 16h.01"/>
+                        <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                    <span>${error.message}</span>
+                </div>
+            `;
+            document.querySelector('.container').insertAdjacentElement('afterbegin', errorMessage);
+            
+            setTimeout(() => {
+                errorMessage.remove();
+            }, 5000);
+        } finally {
+            // Restore button state
+            addMonitorBtn.disabled = false;
+            addMonitorBtn.innerHTML = originalText;
+        }
+    });
+
+    // Refresh status
+    refreshStatusBtn.addEventListener('click', updateMonitorsList);
+
+    // Initialize inputs with validation
+    const inputs = [monitorTitleInput, monitorUrlInput, webhookUrlInput];
+    inputs.forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.remove('border-destructive');
+            const errorEl = input.nextElementSibling;
+            if (errorEl?.classList.contains('input-error')) {
+                errorEl.remove();
+            }
+        });
+    });
+
+    // Refresh button click animation
+    [refreshStatusBtn].forEach(btn => {
+        btn.addEventListener('click', function() {
+            const icon = this.querySelector('svg');
+            if (icon) {
+                icon.classList.add('animate-spin');
+                setTimeout(() => icon.classList.remove('animate-spin'), 1000);
+            }
+        });
+    });
+
+    // Theme management
+    const themeToggle = document.getElementById('themeToggle');
+    const lightIcon = document.getElementById('lightIcon');
+    const darkIcon = document.getElementById('darkIcon');
+    
+    // Check for saved theme preference, otherwise use system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    function updateTheme(isDark) {
+        document.documentElement.classList.toggle('dark', isDark);
+        lightIcon.style.display = isDark ? 'none' : 'block';
+        darkIcon.style.display = isDark ? 'block' : 'none';
+    }
+    
+    // Initialize theme
+    if (savedTheme) {
+        updateTheme(savedTheme === 'dark');
+    } else {
+        updateTheme(prefersDark.matches);
+    }
+    
+    // Handle theme toggle click
+    themeToggle.addEventListener('click', () => {
+        const isDark = !document.documentElement.classList.contains('dark');
+        updateTheme(isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+    
+    // Handle system theme changes
+    prefersDark.addListener((e) => {
+        if (!localStorage.getItem('theme')) {
+            updateTheme(e.matches);
+        }
+    });
+
+    // Stop monitoring for specific URL with confirmation
+    window.stopMonitoringUrl = async (encodedUrl) => {
+        if (!confirm('Are you sure you want to stop this monitor?')) {
+            return;
+        }
+
+        try {
+            const button = event.target;
+            button.disabled = true;
+            button.innerHTML = `
+                <svg class="animate-spin mr-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                </svg>
+                Stopping...
+            `;
+
+            await fetchAPI(`/stopMonitoring?url=${encodedUrl}`);
+            await updateMonitorsList();
+
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <div class="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                    <span>Monitor stopped successfully!</span>
+                </div>
+            `;
+            document.querySelector('.container').insertAdjacentElement('afterbegin', successMessage);
+
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        } catch (error) {
+            console.error('Failed to stop monitor:', error);
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.innerHTML = `
+                <div class="flex items-center justify-center gap-2 bg-destructive text-destructive-foreground p-4 rounded-lg mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 8v4M12 16h.01"/>
+                        <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                    <span>Failed to stop monitor: ${error.message}</span>
+                </div>
+            `;
+            document.querySelector('.container').insertAdjacentElement('afterbegin', errorMessage);
+            
+            setTimeout(() => {
+                errorMessage.remove();
+            }, 5000);
+        }
+    };
+
+    // Initialize
+    updateMonitorsList();
+});
