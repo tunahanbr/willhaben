@@ -1,1 +1,17 @@
 
+{"level":"info","message":"╔════════════════════════════════════════════════════════════════╗","timestamp":"2025-10-25T09:38:26.294Z"}
+{"level":"info","message":"║  Enhanced Willhaben Scraper API - Running on Port 2456     ║","timestamp":"2025-10-25T09:38:26.296Z"}
+{"level":"info","message":"║  Environment: production                                    ║","timestamp":"2025-10-25T09:38:26.296Z"}
+{"level":"info","message":"╚════════════════════════════════════════════════════════════════╝","timestamp":"2025-10-25T09:38:26.296Z"}
+{"level":"info","message":"📊 Basic Endpoints:","timestamp":"2025-10-25T09:38:26.296Z"}
+{"level":"info","message":"  GET /api/getListings?url=YOUR_URL","timestamp":"2025-10-25T09:38:26.296Z"}
+{"level":"info","message":"  GET /api/getAllListings?url=YOUR_URL","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"🔄 Monitoring Endpoints:","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"  GET /api/startMonitoring?url=YOUR_URL&webhook=YOUR_WEBHOOK","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"  GET /api/stopMonitoring?url=YOUR_URL","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"  GET /api/getChanges?url=YOUR_URL&clear=true","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"  GET /api/getMonitoringStatus","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"🌐 Server ready in production mode","timestamp":"2025-10-25T09:38:26.297Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:09:38:30 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T09:38:30.994Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:09:39:01 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T09:39:01.095Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:09:39:31 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T09:39:31.190Z"}

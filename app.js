@@ -19,28 +19,31 @@ const app = express();
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
-            defaultSrc: ["'self'"],
+            defaultSrc: ["'self'", "*"],
             scriptSrc: [
                 "'self'",
-                "'sha256-ieoeWczDHkReVBsRBqaal5AFMlBtNjMzgwKvLqi/tSU='",
-                "'sha256-C1S0qJkjGxUxUyPdPD2LcNiSsSsyJcgoLcxJD3Nc0BE='"
+                "'unsafe-inline'",
+                "'unsafe-eval'"
             ],
-            styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            connectSrc: ["'self'"],
-            imgSrc: ["'self'", "data:", "https:"],
-            frameSrc: ["'none'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
+            fontSrc: ["'self'", "https:", "http:", "data:"],
+            connectSrc: ["'self'", "*"],
+            imgSrc: ["'self'", "data:", "https:", "http:"],
+            frameSrc: ["'self'"],
             objectSrc: ["'none'"],
             manifestSrc: ["'self'"],
             formAction: ["'self'"],
             baseUri: ["'self'"],
         }
-    }
+    },
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 app.use(cors({
-    origin: config.allowedOrigins,
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type', 'X-API-Key']
+    origin: '*',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'X-API-Key'],
+    credentials: true
 }));
 
 // Rate limiting
@@ -77,6 +80,11 @@ app.use('/api', validateApiKey, scrapingRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
 
 // Handle 404s
 app.use((req, res) => {
