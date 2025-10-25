@@ -4,15 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Willhaben Monitor</title>
-    <link rel="stylesheet" href="/styles.css" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Inline critical CSS -->
     <style>
-        /* Fallback styles in case the external CSS fails to load */
-        body { background: #fff; color: #000; font-family: -apple-system, system-ui, sans-serif; }
-        .dark body { background: #000; color: #fff; }
+        :root {
+            --background: #ffffff;
+            --foreground: #020817;
+            --primary: #0f172a;
+            --secondary: #f1f5f9;
+        }
+        .dark {
+            --background: #020817;
+            --foreground: #f8fafc;
+            --primary: #f8fafc;
+            --secondary: #1e293b;
+        }
+        body {
+            background: var(--background);
+            color: var(--foreground);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-family: -apple-system, system-ui, sans-serif;
+        }
     </style>
+    
+    <!-- Load main CSS -->
+    <link rel="stylesheet" href="/styles.css" type="text/css" 
+          onerror="this.onerror=null;this.href='/styles.css?'+new Date().getTime();"
+          onload="this.dataset.loaded=true">
 </head>
 <body>
     <div class="min-h-screen bg-background">
@@ -95,34 +125,63 @@
             </div>
         </main>
     </div>
-    <script>
-        // Add error handling for resource loading
-        window.addEventListener('error', function(e) {
-            console.error('Resource loading failed:', e.target.src || e.target.href);
-            if (e.target.tagName === 'SCRIPT') {
-                console.error('Script loading failed:', e.target.src);
-            } else if (e.target.tagName === 'LINK') {
-                console.error('CSS loading failed:', e.target.href);
-            }
-        }, true);
+    <!-- Add loading indicator -->
+    <div id="loadingIndicator" class="loading">
+        Loading application...
+    </div>
 
-        // Function to load app.js
-        function loadAppJs() {
+    <script>
+        let retryCount = 0;
+        const maxRetries = 3;
+
+        function loadResources() {
+            // Load CSS
+            if (!document.querySelector('link[rel="stylesheet"][data-loaded="true"]')) {
+                const css = document.createElement('link');
+                css.rel = 'stylesheet';
+                css.type = 'text/css';
+                css.href = '/styles.css?' + new Date().getTime(); // Cache buster
+                css.onload = () => css.dataset.loaded = true;
+                document.head.appendChild(css);
+            }
+
+            // Load JavaScript
             return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
-                script.src = '/app.js';
                 script.type = 'text/javascript';
-                script.onload = resolve;
-                script.onerror = () => {
-                    console.error('Failed to load app.js, retrying...');
-                    setTimeout(loadAppJs, 1000);  // Retry after 1 second
+                script.src = '/app.js?' + new Date().getTime(); // Cache buster
+                script.onload = () => {
+                    document.getElementById('loadingIndicator').style.display = 'none';
+                    resolve();
+                };
+                script.onerror = (error) => {
+                    console.error('Failed to load app.js');
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.log(`Retrying... (${retryCount}/${maxRetries})`);
+                        setTimeout(() => loadResources(), 1000);
+                    } else {
+                        document.getElementById('loadingIndicator').innerHTML = 'Failed to load application. Please refresh the page.';
+                        reject(error);
+                    }
                 };
                 document.body.appendChild(script);
             });
         }
 
-        // Load app.js
-        loadAppJs().catch(console.error);
+        // Start loading resources
+        window.addEventListener('load', () => {
+            loadResources().catch(console.error);
+        });
+
+        // Monitor all resource loading errors
+        window.addEventListener('error', function(e) {
+            console.error('Resource loading failed:', {
+                element: e.target.tagName,
+                source: e.target.src || e.target.href,
+                error: e.error
+            });
+        }, true);
     </script>
 </body>
 </html>
