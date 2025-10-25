@@ -62,14 +62,25 @@ app.use(express.json({ limit: '10kb' })); // Limit payload size
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Serve static files from the public directory with security headers
-app.use(express.static('public', {
+app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, path, stat) => {
         res.set('X-Content-Type-Options', 'nosniff');
+        res.set('Cache-Control', 'no-cache');
         if (path.endsWith('.html')) {
             res.set('X-Frame-Options', 'DENY');
         }
     }
 }));
+
+// Serve index.html for the root path
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Serve auth.html for /auth path
+app.get('/auth', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'auth.html'));
+});
 
 // Apply rate limiting to all API routes
 app.use('/api', limiter);
