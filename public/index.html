@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Willhaben Monitor</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fallback styles in case the external CSS fails to load */
+        body { background: #fff; color: #000; font-family: -apple-system, system-ui, sans-serif; }
+        .dark body { background: #000; color: #fff; }
+    </style>
 </head>
 <body>
     <div class="min-h-screen bg-background">
@@ -90,15 +95,34 @@
             </div>
         </main>
     </div>
-    <script src="app.js" type="text/javascript"></script>
     <script>
-        // Add error handling for script loading
+        // Add error handling for resource loading
         window.addEventListener('error', function(e) {
+            console.error('Resource loading failed:', e.target.src || e.target.href);
             if (e.target.tagName === 'SCRIPT') {
                 console.error('Script loading failed:', e.target.src);
-                alert('Failed to load required scripts. Please check your connection and refresh the page.');
+            } else if (e.target.tagName === 'LINK') {
+                console.error('CSS loading failed:', e.target.href);
             }
         }, true);
+
+        // Function to load app.js
+        function loadAppJs() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = '/app.js';
+                script.type = 'text/javascript';
+                script.onload = resolve;
+                script.onerror = () => {
+                    console.error('Failed to load app.js, retrying...');
+                    setTimeout(loadAppJs, 1000);  // Retry after 1 second
+                };
+                document.body.appendChild(script);
+            });
+        }
+
+        // Load app.js
+        loadAppJs().catch(console.error);
     </script>
 </body>
 </html>

@@ -57,34 +57,47 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 app.use(express.json({ limit: '10kb' })); // Limit payload size
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Serve static files from the public directory with security headers
+// Custom middleware to serve static files with proper headers
+app.use((req, res, next) => {
+    // Add CORS headers to all responses
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
+    next();
+});
+
+// Explicitly handle CSS files
+app.get('/styles.css', (req, res) => {
+    res.set({
+        'Content-Type': 'text/css; charset=UTF-8',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'no-cache, must-revalidate',
+    });
+    res.sendFile(path.join(__dirname, 'public', 'styles.css'));
+});
+
+// Explicitly handle JavaScript files
+app.get('/app.js', (req, res) => {
+    res.set({
+        'Content-Type': 'text/javascript; charset=UTF-8',
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'no-cache, must-revalidate',
+    });
+    res.sendFile(path.join(__dirname, 'public', 'app.js'));
+});
+
+// Serve other static files
 app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, filepath, stat) => {
-        // Basic security headers
         res.set('X-Content-Type-Options', 'nosniff');
-        res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.set('Pragma', 'no-cache');
-        res.set('Expires', '0');
+        res.set('Cache-Control', 'no-cache, must-revalidate');
         
-        // Set correct MIME types
-        if (filepath.endsWith('.css')) {
-            res.setHeader('Content-Type', 'text/css; charset=UTF-8');
-        }
-        if (filepath.endsWith('.js')) {
-            res.setHeader('Content-Type', 'text/javascript; charset=UTF-8');
-        }
         if (filepath.endsWith('.html')) {
-            res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+            res.set('Content-Type', 'text/html; charset=UTF-8');
             res.set('X-Frame-Options', 'DENY');
         }
-
-        // Allow cross-origin
-        res.set('Access-Control-Allow-Origin', '*');
-        res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
-        res.set('Access-Control-Allow-Headers', 'Content-Type');
     },
-    dotfiles: 'deny',
-    maxAge: '1h'
+    dotfiles: 'deny'
 }));
 
 // Serve index.html for the root path
