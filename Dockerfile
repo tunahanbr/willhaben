@@ -14,7 +14,7 @@ COPY . .
 
 FROM node:20-slim
 
-# Install dependencies for Puppeteer
+# Install dependencies for Puppeteer and networking tools
 RUN apt-get update \
     && apt-get install -y chromium \
        chromium-sandbox \
@@ -24,6 +24,8 @@ RUN apt-get update \
        fonts-kacst \
        fonts-freefont-ttf \
        libxss1 \
+       net-tools \
+       curl \
        --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
@@ -33,7 +35,9 @@ RUN apt-get update \
 # Set environment variables for Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
-    NODE_ENV=production
+    NODE_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=2456
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -52,7 +56,7 @@ EXPOSE 2456
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD node healthcheck.js
+    CMD curl -f http://localhost:2456/health || exit 1
 
 # Start the application
 CMD ["npm", "start"]

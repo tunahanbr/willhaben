@@ -17,33 +17,29 @@ const app = express();
 
 // Security middleware
 app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'", "*"],
-            scriptSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "'unsafe-eval'"
-            ],
-            styleSrc: ["'self'", "'unsafe-inline'", "https:", "http:"],
-            fontSrc: ["'self'", "https:", "http:", "data:"],
-            connectSrc: ["'self'", "*"],
-            imgSrc: ["'self'", "data:", "https:", "http:"],
-            frameSrc: ["'self'"],
-            objectSrc: ["'none'"],
-            manifestSrc: ["'self'"],
-            formAction: ["'self'"],
-            baseUri: ["'self'"],
-        }
-    },
+    contentSecurityPolicy: false,  // Disable CSP temporarily for debugging
     crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: { policy: "unsafe-none" }
 }));
+
+// Add custom security headers
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 app.use(cors({
-    origin: '*',
+    origin: function(origin, callback) {
+        callback(null, true);  // allow all origins
+    },
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-API-Key'],
-    credentials: true
+    allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization'],
+    credentials: true,
+    preflightContinue: true,
+    optionsSuccessStatus: 204
 }));
 
 // Rate limiting
@@ -64,9 +60,21 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 // Serve static files from the public directory with security headers
 app.use(express.static(path.join(__dirname, 'public'), {
     setHeaders: (res, path, stat) => {
+        // Allow all types of content to be loaded
         res.set('X-Content-Type-Options', 'nosniff');
-        res.set('Cache-Control', 'no-cache');
+        res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+        
+        // Set correct content types
+        if (path.endsWith('.css')) {
+            res.set('Content-Type', 'text/css');
+        }
+        if (path.endsWith('.js')) {
+            res.set('Content-Type', 'application/javascript');
+        }
         if (path.endsWith('.html')) {
+            res.set('Content-Type', 'text/html');
             res.set('X-Frame-Options', 'DENY');
         }
     }
@@ -81,6 +89,9 @@ app.get('/', (req, res) => {
 app.get('/auth', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'auth.html'));
 });
+
+// Handle OPTIONS requests
+app.options('*', cors());
 
 // Apply rate limiting to all API routes
 app.use('/api', limiter);
@@ -126,9 +137,10 @@ process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Start server
-const server = app.listen(config.port, () => {
+const host = process.env.HOST || '0.0.0.0';
+const server = app.listen(config.port, host, () => {
     logger.info(`╔════════════════════════════════════════════════════════════════╗`);
-    logger.info(`║  Enhanced Willhaben Scraper API - Running on Port ${config.port}     ║`);
+    logger.info(`║  Enhanced Willhaben Scraper API - Running on ${host}:${config.port}     ║`);
     logger.info(`║  Environment: ${config.env}                                    ║`);
     logger.info(`╚════════════════════════════════════════════════════════════════╝`);
     
