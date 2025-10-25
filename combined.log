@@ -163,3 +163,46 @@
 {"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:02:36 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:02:36.482Z"}
 {"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:03:06 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:03:06.568Z"}
 {"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:03:36 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:03:36.642Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:04:06 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:04:06.739Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:04:36 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:04:36.877Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:05:06 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:05:06.984Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:10:45 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:10:45.991Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:11:43:05 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T11:43:05.418Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:13:05:29 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T13:05:29.096Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:14:13:10 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T14:13:10.617Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:15:45:27 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T15:45:27.463Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:16:35:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T16:35:42.169Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:06:13 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:06:13.094Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:11:10 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:11:10.997Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:11:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:11:41.107Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:12:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:12:11.199Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:12:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:12:41.267Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:13:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:13:11.356Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:13:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:13:41.442Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:14:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:14:11.520Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:14:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:14:41.592Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:15:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:15:11.671Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:15:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:15:41.730Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:16:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:16:11.823Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:16:41 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:16:41.882Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:17:11 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:17:11.983Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:17:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:17:42.061Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:18:12 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:18:12.149Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:18:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:18:42.230Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:19:12 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:19:12.320Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:19:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:19:42.409Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:20:12 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:20:12.499Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:20:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:20:42.584Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:21:12 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:21:12.676Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:21:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:21:42.771Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:22:12 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:22:12.869Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:22:42 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:22:42.961Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:23:13 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:23:13.044Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:23:43 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:23:43.130Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:24:13 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:24:13.223Z"}
+{"ip":"::ffff:192.168.65.1","level":"warn","message":"API request without key","path":"/getMonitoringStatus","timestamp":"2025-10-25T18:24:18.478Z"}
+{"level":"info","message":"::ffff:192.168.65.1 - - [25/Oct/2025:18:24:18 +0000] \"GET /api/getMonitoringStatus HTTP/1.1\" 401 31 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-25T18:24:18.479Z"}
+{"level":"info","message":"::ffff:192.168.65.1 - - [25/Oct/2025:18:24:22 +0000] \"GET / HTTP/1.1\" 200 5214 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0\"","timestamp":"2025-10-25T18:24:22.126Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:24:43 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:24:43.315Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:25:13 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:25:13.410Z"}
+{"level":"info","message":"::ffff:127.0.0.1 - - [25/Oct/2025:18:25:43 +0000] \"GET /health HTTP/1.1\" 200 15 \"-\" \"-\"","timestamp":"2025-10-25T18:25:43.487Z"}

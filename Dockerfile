@@ -45,8 +45,14 @@ WORKDIR /usr/src/app
 # Copy from builder stage
 COPY --from=builder /usr/src/app .
 
+# Ensure public directory and files exist
+RUN mkdir -p /usr/src/app/public && \
+    touch /usr/src/app/public/app.js && \
+    touch /usr/src/app/public/styles.css
+
 # Set permissions
-RUN chown -R pptruser:pptruser /usr/src/app
+RUN chown -R pptruser:pptruser /usr/src/app && \
+    chmod -R 755 /usr/src/app/public
 
 # Switch to non-root user
 USER pptruser

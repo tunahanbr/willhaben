@@ -90,6 +90,15 @@
             </div>
         </main>
     </div>
-    <script src="app.js"></script>
+    <script src="app.js" type="text/javascript"></script>
+    <script>
+        // Add error handling for script loading
+        window.addEventListener('error', function(e) {
+            if (e.target.tagName === 'SCRIPT') {
+                console.error('Script loading failed:', e.target.src);
+                alert('Failed to load required scripts. Please check your connection and refresh the page.');
+            }
+        }, true);
+    </script>
 </body>
 </html>

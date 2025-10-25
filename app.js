@@ -59,25 +59,32 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Serve static files from the public directory with security headers
 app.use(express.static(path.join(__dirname, 'public'), {
-    setHeaders: (res, path, stat) => {
-        // Allow all types of content to be loaded
+    setHeaders: (res, filepath, stat) => {
+        // Basic security headers
         res.set('X-Content-Type-Options', 'nosniff');
         res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.set('Pragma', 'no-cache');
         res.set('Expires', '0');
         
-        // Set correct content types
-        if (path.endsWith('.css')) {
-            res.set('Content-Type', 'text/css');
+        // Set correct MIME types
+        if (filepath.endsWith('.css')) {
+            res.setHeader('Content-Type', 'text/css; charset=UTF-8');
         }
-        if (path.endsWith('.js')) {
-            res.set('Content-Type', 'application/javascript');
+        if (filepath.endsWith('.js')) {
+            res.setHeader('Content-Type', 'text/javascript; charset=UTF-8');
         }
-        if (path.endsWith('.html')) {
-            res.set('Content-Type', 'text/html');
+        if (filepath.endsWith('.html')) {
+            res.setHeader('Content-Type', 'text/html; charset=UTF-8');
             res.set('X-Frame-Options', 'DENY');
         }
-    }
+
+        // Allow cross-origin
+        res.set('Access-Control-Allow-Origin', '*');
+        res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        res.set('Access-Control-Allow-Headers', 'Content-Type');
+    },
+    dotfiles: 'deny',
+    maxAge: '1h'
 }));
 
 // Serve index.html for the root path
