@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const path = require('path');
+const fs = require('fs');
 
 const config = require('./config/config');
 const logger = require('./utils/logger');
@@ -57,47 +58,80 @@ app.use(morgan('combined', { stream: { write: message => logger.info(message.tri
 app.use(express.json({ limit: '10kb' })); // Limit payload size
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Custom middleware to serve static files with proper headers
+// Debug middleware to log all requests
 app.use((req, res, next) => {
-    // Add CORS headers to all responses
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
+    console.log(`${req.method} ${req.url}`);
     next();
 });
 
-// Explicitly handle CSS files
-app.get('/styles.css', (req, res) => {
-    res.set({
-        'Content-Type': 'text/css; charset=UTF-8',
-        'X-Content-Type-Options': 'nosniff',
-        'Cache-Control': 'no-cache, must-revalidate',
-    });
-    res.sendFile(path.join(__dirname, 'public', 'styles.css'));
+// CORS middleware
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
 });
 
-// Explicitly handle JavaScript files
+// Serve static files with specific configuration for each type
 app.get('/app.js', (req, res) => {
+    console.log('Serving app.js...');
+    const filePath = path.join(__dirname, 'public', 'app.js');
+    console.log('File path:', filePath);
+    
+    if (!fs.existsSync(filePath)) {
+        console.error('app.js not found at:', filePath);
+        return res.status(404).send('File not found');
+    }
+
     res.set({
         'Content-Type': 'text/javascript; charset=UTF-8',
-        'X-Content-Type-Options': 'nosniff',
-        'Cache-Control': 'no-cache, must-revalidate',
+        'Cache-Control': 'no-cache',
+        'X-Content-Type-Options': 'nosniff'
     });
-    res.sendFile(path.join(__dirname, 'public', 'app.js'));
+    res.sendFile(filePath);
 });
 
-// Serve other static files
+app.get('/styles.css', (req, res) => {
+    console.log('Serving styles.css...');
+    const filePath = path.join(__dirname, 'public', 'styles.css');
+    console.log('File path:', filePath);
+
+    if (!fs.existsSync(filePath)) {
+        console.error('styles.css not found at:', filePath);
+        return res.status(404).send('File not found');
+    }
+
+    res.set({
+        'Content-Type': 'text/css; charset=UTF-8',
+        'Cache-Control': 'no-cache',
+        'X-Content-Type-Options': 'nosniff'
+    });
+    res.sendFile(filePath);
+});
+
+// Static file serving for other files
 app.use(express.static(path.join(__dirname, 'public'), {
-    setHeaders: (res, filepath, stat) => {
-        res.set('X-Content-Type-Options', 'nosniff');
-        res.set('Cache-Control', 'no-cache, must-revalidate');
+    index: false,  // Disable automatic index serving
+    dotfiles: 'deny',
+    etag: false,
+    lastModified: false,
+    setHeaders: (res, filepath) => {
+        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.set('Pragma', 'no-cache');
+        res.set('Expires', '0');
+        res.set('Surrogate-Control', 'no-store');
         
         if (filepath.endsWith('.html')) {
             res.set('Content-Type', 'text/html; charset=UTF-8');
             res.set('X-Frame-Options', 'DENY');
         }
-    },
-    dotfiles: 'deny'
+    }
 }));
 
 // Serve index.html for the root path
