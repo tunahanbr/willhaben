@@ -8,7 +8,10 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     volumes:
-      - ./public:/usr/src/app/public:ro
+      - type: bind
+        source: ./public
+        target: /usr/src/app/public
+        read_only: true
     networks:
       - app-network
     restart: unless-stopped

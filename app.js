@@ -18,7 +18,26 @@ const app = express();
 
 // Security middleware
 app.use(helmet({
-    contentSecurityPolicy: false,  // Disable CSP temporarily for debugging
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: [
+                "'self'",
+                "'unsafe-inline'",
+                "'unsafe-eval'",
+                "'unsafe-hashes'",
+                // Add hashes for inline scripts
+                "'sha256-zMw8WNt0md349n6HspNj3FHQ8UabsZ77o5vw5ehaFBk='",
+                "'sha256-9e7D5BiBQUup24UYBnm4HpylAFg2o7Obj2+Ac8v1dOo='"
+            ],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            connectSrc: ["'self'"],
+            imgSrc: ["'self'", "data:"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            scriptSrcElem: ["'self'", "'unsafe-inline'"]
+        }
+    },
     crossOriginEmbedderPolicy: false,
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginOpenerPolicy: { policy: "unsafe-none" }
@@ -115,24 +134,28 @@ app.get('/styles.css', (req, res) => {
     res.sendFile(filePath);
 });
 
-// Static file serving for other files
-app.use(express.static(path.join(__dirname, 'public'), {
-    index: false,  // Disable automatic index serving
+// Serve static files
+const staticOptions = {
     dotfiles: 'deny',
-    etag: false,
-    lastModified: false,
+    etag: true,
+    maxAge: '1h',
     setHeaders: (res, filepath) => {
-        res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-        res.set('Pragma', 'no-cache');
-        res.set('Expires', '0');
-        res.set('Surrogate-Control', 'no-store');
+        // Basic security headers
+        res.set('X-Content-Type-Options', 'nosniff');
         
-        if (filepath.endsWith('.html')) {
+        // Set appropriate content types
+        if (filepath.endsWith('.js')) {
+            res.set('Content-Type', 'application/javascript; charset=UTF-8');
+        } else if (filepath.endsWith('.css')) {
+            res.set('Content-Type', 'text/css; charset=UTF-8');
+        } else if (filepath.endsWith('.html')) {
             res.set('Content-Type', 'text/html; charset=UTF-8');
             res.set('X-Frame-Options', 'DENY');
         }
     }
-}));
+};
+
+app.use(express.static(path.join(__dirname, 'public'), staticOptions));
 
 // Serve index.html for the root path
 app.get('/', (req, res) => {
