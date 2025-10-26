@@ -1,36 +1,27 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "0.0.0.0:2456:2456"
+      - "2456:2456"
     environment:
       - NODE_ENV=production
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - HOST=0.0.0.0
+      - PORT=2456
     volumes:
-      - type: bind
-        source: ./public
-        target: /usr/src/app/public
-        read_only: true
-    networks:
-      - app-network
-    restart: unless-stopped
+      - ./public:/usr/src/app/public:ro
     depends_on:
       - redis
 
   redis:
     image: redis:alpine
     ports:
-      - "127.0.0.1:6379:6379"
+      - "6379:6379"
     volumes:
       - redis_data:/data
-    networks:
-      - app-network
-    restart: unless-stopped
-
-networks:
-  app-network:
-    driver: bridge
 
 volumes:
   redis_data:

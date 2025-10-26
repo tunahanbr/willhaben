@@ -16,51 +16,37 @@ const errorHandler = require('./middleware/error-handler');
 
 const app = express();
 
-// Security middleware
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "'unsafe-eval'",
-                "'unsafe-hashes'",
-                // Add hashes for inline scripts
-                "'sha256-zMw8WNt0md349n6HspNj3FHQ8UabsZ77o5vw5ehaFBk='",
-                "'sha256-9e7D5BiBQUup24UYBnm4HpylAFg2o7Obj2+Ac8v1dOo='"
-            ],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            connectSrc: ["'self'"],
-            imgSrc: ["'self'", "data:"],
-            scriptSrcAttr: ["'unsafe-inline'"],
-            scriptSrcElem: ["'self'", "'unsafe-inline'"]
-        }
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" },
-    crossOriginOpenerPolicy: { policy: "unsafe-none" }
-}));
-
-// Add custom security headers
+// Disable helmet CSP completely for development
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.removeHeader('Content-Security-Policy');
+    res.removeHeader('X-Content-Security-Policy');
     next();
 });
+
+// Security middleware - CSP disabled
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: false,
+    crossOriginOpenerPolicy: false
+}));
+
+// Configure CORS
 app.use(cors({
-    origin: function(origin, callback) {
-        callback(null, true);  // allow all origins
-    },
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'X-API-Key', 'Authorization'],
-    credentials: true,
-    preflightContinue: true,
-    optionsSuccessStatus: 204
+    credentials: false
 }));
+
+// Force HTTP for development
+app.use((req, res, next) => {
+    if (req.secure) {
+        res.redirect('http://' + req.headers.host + req.url);
+    } else {
+        next();
+    }
+});
 
 // Rate limiting
 const limiter = rateLimit({
@@ -83,79 +69,22 @@ app.use((req, res, next) => {
     next();
 });
 
-// CORS middleware
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, X-API-Key');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    
-    // Handle preflight requests
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
-
-// Serve static files with specific configuration for each type
-app.get('/app.js', (req, res) => {
-    console.log('Serving app.js...');
-    const filePath = path.join(__dirname, 'public', 'app.js');
-    console.log('File path:', filePath);
-    
-    if (!fs.existsSync(filePath)) {
-        console.error('app.js not found at:', filePath);
-        return res.status(404).send('File not found');
-    }
-
-    res.set({
-        'Content-Type': 'text/javascript; charset=UTF-8',
-        'Cache-Control': 'no-cache',
-        'X-Content-Type-Options': 'nosniff'
-    });
-    res.sendFile(filePath);
-});
-
-app.get('/styles.css', (req, res) => {
-    console.log('Serving styles.css...');
-    const filePath = path.join(__dirname, 'public', 'styles.css');
-    console.log('File path:', filePath);
-
-    if (!fs.existsSync(filePath)) {
-        console.error('styles.css not found at:', filePath);
-        return res.status(404).send('File not found');
-    }
-
-    res.set({
-        'Content-Type': 'text/css; charset=UTF-8',
-        'Cache-Control': 'no-cache',
-        'X-Content-Type-Options': 'nosniff'
-    });
-    res.sendFile(filePath);
-});
-
-// Serve static files
-const staticOptions = {
+// Serve static files with simple configuration
+app.use(express.static(path.join(__dirname, 'public'), {
     dotfiles: 'deny',
-    etag: true,
-    maxAge: '1h',
+    index: false,
     setHeaders: (res, filepath) => {
-        // Basic security headers
-        res.set('X-Content-Type-Options', 'nosniff');
+        res.set('Cache-Control', 'no-store');
         
-        // Set appropriate content types
         if (filepath.endsWith('.js')) {
             res.set('Content-Type', 'application/javascript; charset=UTF-8');
         } else if (filepath.endsWith('.css')) {
             res.set('Content-Type', 'text/css; charset=UTF-8');
         } else if (filepath.endsWith('.html')) {
             res.set('Content-Type', 'text/html; charset=UTF-8');
-            res.set('X-Frame-Options', 'DENY');
         }
     }
-};
-
-app.use(express.static(path.join(__dirname, 'public'), staticOptions));
+}));
 
 // Serve index.html for the root path
 app.get('/', (req, res) => {
@@ -167,8 +96,8 @@ app.get('/auth', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'auth.html'));
 });
 
-// Handle OPTIONS requests
-app.options('*', cors());
+// Enable CORS for all routes
+app.use(cors());
 
 // Apply rate limiting to all API routes
 app.use('/api', limiter);

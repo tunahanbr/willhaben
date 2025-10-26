@@ -55,12 +55,8 @@ RUN echo "Verifying public files..." && \
     test -f /usr/src/app/public/index.html && \
     echo "Files verified successfully" && \
     # Set proper permissions
-    chown -R pptruser:pptruser /usr/src/app && \
-    chmod -R 755 /usr/src/app/public && \
-    find /usr/src/app/public -type f -exec chmod 644 {} \;
-
-# Switch to non-root user
-USER pptruser
+    chmod -R 755 /usr/src/app && \
+    chmod -R 755 /usr/src/app/public
 
 # Expose port
 EXPOSE 2456
